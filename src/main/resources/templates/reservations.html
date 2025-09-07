@@ -60,10 +60,6 @@
                          th:with="dateKey=${#temporals.format(day, 'yyyy-MM-dd')},
                          slotList=${reservationMap[dateKey.toString()] != null ? reservationMap[dateKey.toString()][h.toString()] : null}">
 
-                        <!-- 시간 구간 표시 -->
-                        <div class="slot-time"
-                             th:text="${T(java.lang.String).format('%02d:00~%02d:00', h, h+1)}">
-                        </div>
 
                         <div class="slot-body">
                             <!-- 예약 있음: 예약자명 표시 -->
@@ -76,8 +72,7 @@
                                    th:if="${#lists.isEmpty(slotList)}"
                                    class="slot-input"
                                    th:data-date="${dateKey}"
-                                   th:data-hour="${hourKey}"
-                                   th:value="${!#lists.isEmpty(slotList) ? slotList.get(0).reserver : ''}"
+                                   th:data-hour="${h}"
                                    placeholder="예약자 입력"/>
                         </div>
                     </div>
