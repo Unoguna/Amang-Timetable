@@ -28,6 +28,7 @@
 2. **Thymeleaf SpEL의 변수 처리 특성**
    - `reservationMap['2025-09-03'][13]` → **리터럴**로 접근 시 정상 동작.
    - `reservationMap[dateKey][h]` → **변수**로 접근 시 타입 매칭이 엄격해 null 반환.
+   - int → Integer auto-boxing / SpEL 변환 과정 문제
 
 ---
 
@@ -75,3 +76,4 @@ reservationMap
 - SpEL에서 변수 기반 Map 키 접근은 타입 매칭이 엄격하다.
 
 - 복잡한 중첩 Map 대신 `"yyyy-MM-dd|HH"` 같은 단일 문자열 키 구조를 쓰는 것도 유지보수에 유리하다.
+
