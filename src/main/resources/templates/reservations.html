@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h2 th:text="${yearMonth} + ' 예약표'"></h2>
+<h2 th:text="${yearMonth} + ' 타임테이블'"></h2>
 
 <div>
     <a th:href="@{/reservations(year=${yearMonth.minusMonths(1).year}, month=${yearMonth.minusMonths(1).monthValue})}">◀ 이전달</a>
@@ -19,6 +19,7 @@
 <table>
     <thead>
     <tr>
+        <th>시간</th>
         <th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
     </tr>
     </thead>
@@ -40,27 +41,20 @@
                          th:each="h : ${#numbers.sequence(5,23)}"
                          th:with="dateKey=${#temporals.format(day, 'yyyy-MM-dd')},
                          slotList=${reservationMap[dateKey.toString()] != null ? reservationMap[dateKey.toString()][h.toString()] : null}">
-                        <div class="slot-time" th:text="${(h<10? '0'+h : h)} + ':00'"></div>
+
+                        <!-- 시간 구간 표시 -->
+                        <div class="slot-time"
+                             th:text="${T(java.lang.String).format('%02d:00~%02d:00', h, h+1)}">
+                        </div>
 
                         <div class="slot-body">
-                            <!-- 예약 있음: 예약자명 표시 -->
-                            <span th:if="${!#lists.isEmpty(slotList)}"
-                                  class="tag"
-                                  th:text="${slotList.get(0).reserver}"></span>
-
-                            <!-- 예약 없음: 입력칸 -->
                             <input type="text"
-                                   th:if="${#lists.isEmpty(slotList)}"
                                    class="slot-input"
                                    th:data-date="${dateKey}"
-                                   th:data-hour="${h}"
+                                   th:data-hour="${hourKey}"
+                                   th:value="${!#lists.isEmpty(slotList) ? slotList.get(0).reserver : ''}"
                                    placeholder="예약자 입력"/>
                         </div>
-                    </div>
-                    <!-- 24:00 표시는 라벨만(구간은 없음) -->
-                    <div class="slot-row">
-                        <div class="slot-time">24:00</div>
-                        <div class="slot-body"></div>
                     </div>
                 </div>
             </div>
