@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h2 th:text="${yearMonth} + ' 예약표'"></h2>
+<h2 th:text="${yearMonth} + ' 타임테이블'"></h2>
 
 <div>
     <a th:href="@{/reservations(year=${yearMonth.minusMonths(1).year}, month=${yearMonth.minusMonths(1).monthValue})}">◀ 이전달</a>
@@ -60,6 +60,11 @@
                          th:with="dateKey=${#temporals.format(day, 'yyyy-MM-dd')},
                          slotList=${reservationMap[dateKey.toString()] != null ? reservationMap[dateKey.toString()][h.toString()] : null}">
 
+                        <!-- 시간 구간 표시 -->
+                        <div class="slot-time"
+                             th:text="${T(java.lang.String).format('%02d:00~%02d:00', h, h+1)}">
+                        </div>
+
                         <div class="slot-body">
                             <!-- 예약 있음: 예약자명 표시 -->
                             <span th:if="${!#lists.isEmpty(slotList)}"
@@ -71,7 +76,8 @@
                                    th:if="${#lists.isEmpty(slotList)}"
                                    class="slot-input"
                                    th:data-date="${dateKey}"
-                                   th:data-hour="${h}"
+                                   th:data-hour="${hourKey}"
+                                   th:value="${!#lists.isEmpty(slotList) ? slotList.get(0).reserver : ''}"
                                    placeholder="예약자 입력"/>
                         </div>
                     </div>

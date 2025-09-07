@@ -1,6 +1,6 @@
 .slot-row {
     display: grid;
-    grid-template-columns: 52px 1fr;
+    grid-template-columns: 80px 1fr;
     border-bottom: 1px dashed #efefef;
     height: 28px;           /* ✅ 아예 고정 */
     overflow: hidden;
@@ -13,6 +13,15 @@
     margin: 0;              /* ✅ 기본 margin 제거 */
     box-sizing: border-box; /* ✅ border/padding 포함 계산 */
 }
+.slot-time {
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+    padding-right: 8px;
+    white-space: nowrap;   /* 줄바꿈 방지 */
+    min-width: 70px;       /* ✅ 최소 너비 확보 */
+}
+
 
 .slot-body {
     font-size: 12px;
@@ -35,7 +44,7 @@
 .day-cell {
     display: flex;
     flex-direction: column;
-    height: 600px;       /* 고정 높이 */
+    height: 580px;       /* 고정 높이 */
     box-sizing: border-box; /* padding 포함 계산 */
 }
 
