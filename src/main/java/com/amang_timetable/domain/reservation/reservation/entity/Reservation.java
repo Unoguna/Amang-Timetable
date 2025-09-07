@@ -15,6 +15,7 @@ import java.time.LocalTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder   // ✅ 추가해야 builder() 메서드 자동 생성됨
 public class Reservation {
     @Id
