@@ -1,35 +1,55 @@
+/* 슬롯 행 (시간 + 예약 영역) */
 .slot-row {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 80px 1fr;  /* 왼쪽 시간 고정, 오른쪽 예약 영역 */
     border-bottom: 1px dashed #efefef;
-    height: 28px;           /* ✅ 아예 고정 */
+    height: 28px;                     /* 높이 고정 */
     overflow: hidden;
 }
 
-.slot-time, .slot-body {
-    line-height: 28px;      /* ✅ 슬롯 높이와 동일하게 맞춤 */
-    height: 28px;           /* ✅ 내부도 강제로 고정 */
-    padding: 0;             /* ✅ 기본 padding 제거 */
-    margin: 0;              /* ✅ 기본 margin 제거 */
-    box-sizing: border-box; /* ✅ border/padding 포함 계산 */
+/* 슬롯 공통 영역 */
+.slot-time,
+.slot-body {
+    line-height: 28px;    /* 슬롯 높이와 동일 */
+    height: 28px;         /* 내부도 고정 */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+/* 왼쪽 시간 영역 */
 .slot-time {
     font-size: 12px;
     color: #666;
     text-align: right;
     padding-right: 8px;
-    white-space: nowrap;   /* 줄바꿈 방지 */
-    min-width: 70px;       /* ✅ 최소 너비 확보 */
+    white-space: nowrap;  /* 줄바꿈 방지 */
+    min-width: 70px;      /* 최소 너비 확보 */
 }
-
 
 .slot-body {
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* 예약자가 많으면 … 처리 */
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: center;         /* 세로는 중앙 */
+    width: 100%;
+    height: 100%;
+    padding: 0 4px;              /* 좌우 약간 여백 */
+    margin: 0;
 }
 
+.slot-input {
+    width: 100%;              /* 칸 전체 채움 */
+    max-width: 95%;           /* 테두리와 겹치지 않게 */
+    box-sizing: border-box;
+    border: none;   /* input 테두리 */
+    padding: 4px;
+    font-size: 12px;
+    text-align: left;         /* 입력 텍스트도 왼쪽 정렬 */
+}
+
+
+
+/* 태그 (예약자 이름 표시용) */
 .tag {
     display: inline-block;
     margin-right: 2px;
@@ -37,45 +57,60 @@
     border-radius: 3px;
     background: #f5f5f5;
     font-size: 11px;
-    line-height: 18px;  /* 태그 자체 줄높이는 작게 */
-    vertical-align: middle; /* ✅ 세로 정렬 안정화 */
+    line-height: 18px;
+    vertical-align: middle;
 }
 
+/* 날짜 셀 전체 */
 .day-cell {
     display: flex;
     flex-direction: column;
-    height: 580px;       /* 고정 높이 */
-    box-sizing: border-box; /* padding 포함 계산 */
+    height: 580px;            /* 고정 높이 */
+    box-sizing: border-box;
 }
 
+/* 날짜 헤더 */
 .day-header {
-    padding: 0 8px;      /* ✅ 위아래 padding 제거 → 높이 변동 방지 */
-    height: 24px;        /* ✅ 고정 높이 */
-    line-height: 24px;   /* ✅ 텍스트 세로 중앙 */
+    height: 24px;
+    line-height: 24px;        /* 텍스트 세로 중앙 */
+    padding: 0 8px;
     font-weight: 600;
     border-bottom: 1px solid #eee;
-    flex-shrink: 0;      /* ✅ slots 영역을 침범하지 않게 */
     background-color: darkseagreen;
+    color: #000;
+    flex-shrink: 0;           /* slots 높이 침범 방지 */
 }
 
+/* 슬롯 영역 */
 .slots {
     flex: 1;
     overflow-y: auto;
-    min-height: 0;       /* ✅ flex 아이템 높이 계산 오류 방지 */
+    min-height: 0;            /* flex 아이템 높이 계산 오류 방지 */
 }
 
+/* 테이블 기본 스타일 */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
 
-
-table { border-collapse: collapse; width: 100%; }
-th, td {
-    border: 1px solid #d1d5db; /* 옅은 회색 테두리 */
+th,
+td {
+    border: 1px solid #d1d5db;  /* 옅은 회색 테두리 */
     text-align: center;
     padding: 6px;
 }
 
 th {
-    background-color: #f9fafb; /* 헤더는 약간 다른 배경 */
+    background-color: #f9fafb;  /* 헤더 배경 */
     font-weight: 600;
 }
-td { padding: 0; } /* 날짜 칸은 내부 레이아웃에서 패딩 처리 */
-.other-month .day-header { color: #bbb; }
+
+td {
+    padding: 0; /* 내부 레이아웃에서 패딩 처리 */
+}
+
+/* 다른 달 날짜 흐리게 */
+.other-month .day-header {
+    color: #bbb;
+}

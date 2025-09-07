@@ -62,17 +62,12 @@
 
 
                         <div class="slot-body">
-                            <!-- 예약 있음: 예약자명 표시 -->
-                            <span th:if="${!#lists.isEmpty(slotList)}"
-                                  class="tag"
-                                  th:text="${slotList.get(0).reserver}"></span>
-
                             <!-- 예약 없음: 입력칸 -->
                             <input type="text"
-                                   th:if="${#lists.isEmpty(slotList)}"
                                    class="slot-input"
                                    th:data-date="${dateKey}"
                                    th:data-hour="${h}"
+                                   th:value="${!#lists.isEmpty(slotList) ? slotList.get(0).reserver : ''}"
                                    placeholder="예약자 입력"/>
                         </div>
                     </div>
@@ -92,9 +87,7 @@
                 }
             });
             input.addEventListener("blur", () => {
-                if (input.value.trim() !== "") {
-                    saveReservation(input);
-                }
+                saveReservation(input);
             });
         });
 
