@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>동아리방 예약</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h2 th:text="${yearMonth} + ' 예약표'"></h2>
+
+<div>
+    <a th:href="@{/reservations(year=${yearMonth.minusMonths(1).year}, month=${yearMonth.minusMonths(1).monthValue})}">◀ 이전달</a>
+    <a th:href="@{/reservations(year=${yearMonth.plusMonths(1).year}, month=${yearMonth.plusMonths(1).monthValue})}">다음달 ▶</a>
+</div>
+
+<!-- 예약 등록 폼 -->
+<form th:action="@{/reservations}" th:object="${form}" method="post">
+    <label>날짜: <input type="date" th:field="*{date}" required></label>
+    <label>시작 시간: <input type="time" th:field="*{startTime}" required></label>
+    <label>종료 시간: <input type="time" th:field="*{endTime}" required></label>
+    <label>예약자: <input type="text" th:field="*{reserver}" required></label>
+    <button type="submit">예약하기</button>
+</form>
+
+<hr>
+
+<!-- 달력 -->
+<table>
+    <thead>
+    <tr>
+        <th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="week : ${weeks}">
+        <td th:each="day : ${week}"
+            th:classappend="${day.monthValue != yearMonth.monthValue} ? 'other-month'">
+            <div class="day-cell">
+                <!-- 날짜 헤더 -->
+                <div class="day-header" th:text="${day.dayOfMonth}"></div>
+
+                <!-- 05:00 ~ 24:00 슬롯 -->
+                <div class="slots">
+                    <!-- h = 5..23 (각 슬롯은 h:00 ~ (h+1):00 구간) -->
+                    <div class="slot-row" th:each="h : ${#numbers.sequence(5,23)}">
+                        <div class="slot-time"
+                             th:text="${(h<10? '0'+h : h)} + ':00'"></div>
+
+                        <div class="slot-body">
+                            <span class="tag"
+                                  th:each="r : ${reservations}"
+                                  th:if="${r.date.equals(day)
+                                          and r.startTime.hour <= h
+                                          and h < r.endTime.hour}"
+                                  th:text="${r.reserver}">
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <!-- 24:00 표시는 라벨만(구간은 없음) -->
+                    <div class="slot-row">
+                        <div class="slot-time">24:00</div>
+                        <div class="slot-body"></div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
