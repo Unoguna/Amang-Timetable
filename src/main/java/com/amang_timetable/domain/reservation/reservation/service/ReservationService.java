@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +16,7 @@ import java.util.Optional;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
-    public List<Reservation> getReservationsForMonth(YearMonth month) {
-        LocalDate start = month.atDay(1);
-        LocalDate end = month.atEndOfMonth();
+    public List<Reservation> getReservationsBetween(LocalDate start, LocalDate end) {
         return reservationRepository.findByDateBetween(start, end);
     }
 

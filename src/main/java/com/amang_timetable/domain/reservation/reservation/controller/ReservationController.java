@@ -45,7 +45,7 @@ public class ReservationController {
         }
 
         // 월 범위 예약 읽기
-        List<Reservation> reservations = reservationService.getReservationsForMonth(ym);
+        List<Reservation> reservations = reservationService.getReservationsBetween(start, end);
 
         // 날짜→시간→리스트 맵 (모든 칸을 빈 리스트로 초기화)
         Map<String, Map<String, List<Reservation>>> reservationMap = new HashMap<>();
