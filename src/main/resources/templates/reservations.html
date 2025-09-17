@@ -33,7 +33,7 @@
                 <!-- 05:00 ~ 24:00 슬롯 -->
                 <div class="slots">
                     <!-- h = 5..23 (각 슬롯은 h:00 ~ (h+1):00 구간) -->
-                    <div class="day-header" ></div>
+                    <div class="time-header" ></div>
                     <div class="slot-row"
                          th:each="h : ${#numbers.sequence(5,23)}">
                         <!-- 시간 구간 표시 -->
@@ -68,7 +68,6 @@
                                    th:data-date="${dateKey}"
                                    th:data-hour="${h}"
                                    th:value="${!#lists.isEmpty(slotList) ? slotList.get(0).reserver : ''}"
-                                   placeholder="예약자 입력"/>
                         </div>
                     </div>
                 </div>
