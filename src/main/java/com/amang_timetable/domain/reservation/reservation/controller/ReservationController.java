@@ -66,7 +66,14 @@ public class ReservationController {
             String dateKey = r.getDate().toString();
             Map<String, List<Reservation>> hourMap = reservationMap.get(dateKey);
             if (hourMap == null) continue;
-            for (int h = r.getStartTime().getHour(); h < r.getEndTime().getHour(); h++) {
+
+            // 예: Reservation r
+            int startHour = r.getStartTime().getHour();
+
+            // ✅ 분이 0보다 크면 다음 슬롯까지 포함시키도록 +1
+            int endExclusive = r.getEndTime().getHour()
+                    + (r.getEndTime().getMinute() > 0 ? 1 : 0);
+            for (int h = startHour; h < endExclusive; h++) {
                 hourMap.get(String.valueOf(h)).add(r);
             }
         }

@@ -94,7 +94,14 @@
         function saveReservation(input) {
             const reserver = input.value.trim();
             const date = input.dataset.date;
-            const hour = input.dataset.hour;
+            const hour = parseInt(input.dataset.hour, 10);
+            if (!reserver) return;
+
+            const startHour = String(hour).padStart(2, "0");
+            // ✅ 23시는 24:00 대신 23:59로 보냄
+            const endHour = (hour === 23)
+                ? "23:59"
+                : String(hour + 1).padStart(2, "0") + ":00";
 
             if (!reserver) return;
 
@@ -103,16 +110,14 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     date: date,
-                    startTime: (hour.length === 1 ? "0" + hour : hour) + ":00",
-                    endTime: (parseInt(hour) + 1) + ":00",
+                    startTime: startHour + ":00",
+                    endTime: endHour,
                     reserver: reserver
                 })
             }).then(res => {
                 if (res.ok) {
                     location.reload();  // ✅ DB 저장 후 화면 다시 불러오기
-                } else {
-                    alert("저장 실패!");
-                }
+                } else res.text().then(t => alert("저장 실패: " + t));
             });
         }
     });
