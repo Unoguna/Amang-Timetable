@@ -1,7 +1,7 @@
 /* 슬롯 행 (시간 + 예약 영역) */
 .slot-row {
     display: grid;
-    border-bottom: 1px dashed #efefef;
+    border-bottom: 1px solid #eee;
     height: 28px;                     /* 높이 고정 */
     overflow: hidden;
 }
@@ -19,10 +19,11 @@
 /* 왼쪽 시간 영역 */
 .slot-time {
     font-size: 12px;
-    color: #666;
+    color: black;
     padding-right: 8px;
     white-space: nowrap;  /* 줄바꿈 방지 */
     min-width: 70px;      /* 최소 너비 확보 */
+    background-color: lightgray;
 }
 
 .slot-body {
@@ -33,7 +34,6 @@
     height: 100%;
     padding: 0 4px;              /* 좌우 약간 여백 */
     margin: 0;
-
 }
 
 .slot-input {
@@ -64,8 +64,9 @@
 .day-cell {
     display: flex;
     flex-direction: column;
-    height: 580px;            /* 고정 높이 */
+    height: auto;            /* 고정 높이 */
     box-sizing: border-box;
+
 }
 
 /* 날짜 헤더 */
@@ -94,6 +95,7 @@
 /* 슬롯 영역 */
 .slots {
     flex: 1;
+    height: auto;
     overflow-y: auto;
     min-height: 0;            /* flex 아이템 높이 계산 오류 방지 */
 }
@@ -105,7 +107,8 @@ table {
 }
 
 th,
-td {
+td,
+tr {
     border: 1px solid #d1d5db;  /* 옅은 회색 테두리 */
     border-bottom: 2px solid #374151;
     text-align: center;
