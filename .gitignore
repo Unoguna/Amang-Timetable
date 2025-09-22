@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### MySql ###
+src/main/resources/application.yml

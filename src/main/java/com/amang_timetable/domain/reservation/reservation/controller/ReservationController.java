@@ -21,6 +21,11 @@ import java.util.Map;
 public class ReservationController {
     private final ReservationService reservationService;
 
+    @GetMapping("")
+    public String home() {
+        return "redirect:/reservations"; // /reservations로 리다이렉트
+    }
+
     @GetMapping("/reservations")
     public String getReservations(@RequestParam(required = false) Integer year,
                                   @RequestParam(required = false) Integer month,
