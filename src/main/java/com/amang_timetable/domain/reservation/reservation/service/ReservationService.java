@@ -5,6 +5,7 @@ import com.amang_timetable.domain.reservation.reservation.entity.Reservation;
 import com.amang_timetable.domain.reservation.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
@@ -45,4 +47,9 @@ public class ReservationService {
             reservationRepository.save(r);
         }
     }
+
+    public void deleteReservation(String date, String startTime) {
+        reservationRepository.deleteByDateAndStartTime(LocalDate.parse(date), LocalTime.parse(startTime));
+    }
+
 }

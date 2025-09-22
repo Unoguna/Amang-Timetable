@@ -68,6 +68,7 @@
                                    th:data-date="${dateKey}"
                                    th:data-hour="${h}"
                                    th:value="${!#lists.isEmpty(slotList) ? slotList.get(0).reserver : ''}"
+                            />
                         </div>
                     </div>
                 </div>
@@ -77,50 +78,81 @@
     </tbody>
 </table>
 
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
 <script>
+
+    let stompClient = null;
+    let wsReady = false;
+
     document.addEventListener("DOMContentLoaded", () => {
+        connectWebSocket();
+        /*
+            사용자가 칸에 이름을 입력하고 엔터를 누르거나, 입력 후 포커스를 벗어나면(blur)
+            → saveReservation(input) 실행됨.
+        */
         document.querySelectorAll(".slot-input").forEach(input => {
+            // 🔹 타이핑할 때마다 상대방 화면에도 바로 반영 (DB는 저장 안 함)
+            input.addEventListener("input", () => {
+                sendReservation(input, false);
+            });
+
             input.addEventListener("keydown", e => {
                 if (e.key === "Enter") {
                     e.preventDefault();
-                    saveReservation(input);
+                    sendReservation(input, true);
                 }
             });
             input.addEventListener("blur", () => {
-                saveReservation(input);
+                sendReservation(input, true);
             });
         });
-
-        function saveReservation(input) {
-            const reserver = input.value.trim();
-            const date = input.dataset.date;
-            const hour = parseInt(input.dataset.hour, 10);
-            if (!reserver) return;
-
-            const startHour = String(hour).padStart(2, "0");
-            // ✅ 23시는 24:00 대신 23:59로 보냄
-            const endHour = (hour === 23)
-                ? "23:59"
-                : String(hour + 1).padStart(2, "0") + ":00";
-
-            if (!reserver) return;
-
-            fetch("/reservations/inline", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    date: date,
-                    startTime: startHour + ":00",
-                    endTime: endHour,
-                    reserver: reserver
-                })
-            }).then(res => {
-                if (res.ok) {
-                    location.reload();  // ✅ DB 저장 후 화면 다시 불러오기
-                } else res.text().then(t => alert("저장 실패: " + t));
-            });
-        }
     });
+
+    function connectWebSocket() {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, () => {
+            wsReady = true;
+            console.log("✅ WebSocket 연결됨");
+
+            // 서버가 브로드캐스트하는 업데이트 구독
+            stompClient.subscribe('/topic/calendar', (res) => {
+                const update = JSON.parse(res.body);
+                applyUpdate(update);
+            });
+        }, (err) => {
+            console.error('WS connect error:', err);
+        });
+    }
+
+    function sendReservation(input, persist) {
+        if (!wsReady) {
+            console.warn("WS not ready; message skipped", input);
+            return;
+        }
+
+        const reserver = input.value.trim();
+        const date = input.dataset.date;
+        const hour = parseInt(input.dataset.hour, 10);
+        const startTime = String(hour).padStart(2, "0") + ":00";
+        // ✅ 23시는 24:00 대신 23:59로 보냄
+        const endTime = (hour === 23)
+            ? "23:59"
+            : String(hour + 1).padStart(2, "0") + ":00";
+
+        const message = { date, startTime, endTime, reserver, persist };
+        stompClient.send("/app/updateCell", {}, JSON.stringify(message));
+    }
+
+    // ✅ 받은 업데이트를 data-date + data-start 로 정확히 찾아서 반영
+    function applyUpdate(update) {
+        console.log("📩 받은 업데이트:", update);
+        const selector = `.slot-input[data-date="${update.date}"][data-hour="${parseInt(update.startTime)}"]`;
+        const input = document.querySelector(selector);
+        if (input) input.value = update.reserver;
+    }
 </script>
 </body>
 </html>

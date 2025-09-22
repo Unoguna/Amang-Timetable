@@ -94,15 +94,15 @@ public class ReservationController {
 
 
     // inline 입력 저장 (엑셀처럼)
-    @PostMapping("/reservations/inline")
-    @ResponseBody
-    public ResponseEntity<?> createOrUpdateReservation(@RequestBody ReservationForm form) {
-        try {
-            reservationService.createOrUpdateReservation(form);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("예약 실패: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/reservations/inline")
+//    @ResponseBody
+//    public ResponseEntity<?> createOrUpdateReservation(@RequestBody ReservationForm form) {
+//        try {
+//            reservationService.createOrUpdateReservation(form);
+//            return ResponseEntity.ok().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body("예약 실패: " + e.getMessage());
+//        }
+//    }
 
 }
