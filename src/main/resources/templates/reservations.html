@@ -92,19 +92,32 @@
             → saveReservation(input) 실행됨.
         */
         document.querySelectorAll(".slot-input").forEach(input => {
+            let isComposing = false;
+
+            input.addEventListener("compositionstart", () => {
+                isComposing = true;
+            });
+
+            input.addEventListener("compositionend", () => {
+                isComposing = false;
+                sendReservation(input, false); // 조합 끝났을 때만 보냄
+            });
             // 🔹 타이핑할 때마다 상대방 화면에도 바로 반영 (DB는 저장 안 함)
             input.addEventListener("input", () => {
-                sendReservation(input, false);
+                if (!isComposing) {
+                    sendReservation(input, false); // 영문/숫자는 바로 전송
+                }
             });
 
             input.addEventListener("keydown", e => {
                 if (e.key === "Enter") {
                     e.preventDefault();
-                    sendReservation(input, true);
+                    sendReservation(input, true); // 최종 저장
                 }
             });
+
             input.addEventListener("blur", () => {
-                sendReservation(input, true);
+                sendReservation(input, true); // 포커스 빠질 때 저장
             });
         });
     });
