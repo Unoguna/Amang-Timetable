@@ -104,6 +104,7 @@
                 if (e.key === "Enter") {
                     e.preventDefault();
                     sendReservation(input, true); // 최종 저장
+                    input.blur();               // ✅ 엔터 후 포커스 해제
                 }
             });
 
