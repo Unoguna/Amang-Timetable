@@ -20,7 +20,7 @@
     <thead>
     <tr>
         <th>시간</th>
-        <th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
+        <th></th><th></th><th></th><th></th><th></th><th></th><th></th>
     </tr>
     </thead>
 
@@ -50,7 +50,8 @@
 
             <div class="day-cell">
                 <!-- 날짜 헤더 -->
-                <div class="day-header" th:text="${day.dayOfMonth}"></div>
+                <div class="day-header" th:text="${day.monthValue} + '월 ' + ${day.dayOfMonth} + '일 '
+              + ${#temporals.format(day, 'E')}"></div>
 
                 <!-- 05:00 ~ 24:00 슬롯 -->
                 <div class="slots">
