@@ -1,13 +1,12 @@
 package com.amang_timetable.domain.reservation.reservation.controller;
 
-import com.amang_timetable.domain.reservation.reservation.dto.ReservationForm;
 import com.amang_timetable.domain.reservation.reservation.entity.Reservation;
 import com.amang_timetable.domain.reservation.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -83,10 +82,15 @@ public class ReservationController {
             }
         }
 
-        System.out.println(reservations);
-        System.out.println(reservationMap);
+        // ✅ 범위 제한 (1년 전 ~ 1년 후)
+        YearMonth minMonth = YearMonth.now().minusYears(1);
+        YearMonth maxMonth = YearMonth.now().plusYears(1);
+        if (ym.isBefore(minMonth)) ym = minMonth;
+        if (ym.isAfter(maxMonth)) ym = maxMonth;
 
         model.addAttribute("yearMonth", ym);
+        model.addAttribute("minMonth", minMonth);
+        model.addAttribute("maxMonth", maxMonth);
         model.addAttribute("weeks", weeks);
         model.addAttribute("reservationMap", reservationMap);
         return "reservations";

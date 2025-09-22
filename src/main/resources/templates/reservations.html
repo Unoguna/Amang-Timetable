@@ -9,9 +9,21 @@
 <h2 th:text="${yearMonth} + ' 타임테이블'"></h2>
 
 <div>
-    <a th:href="@{/reservations(year=${yearMonth.minusMonths(1).year}, month=${yearMonth.minusMonths(1).monthValue})}">◀ 이전달</a>
-    <a th:href="@{/reservations(year=${yearMonth.plusMonths(1).year}, month=${yearMonth.plusMonths(1).monthValue})}">다음달 ▶</a>
+    <!-- 이전달 버튼 -->
+    <a th:if="${yearMonth.isAfter(minMonth)}"
+       th:href="@{/reservations(year=${yearMonth.minusMonths(1).year}, month=${yearMonth.minusMonths(1).monthValue})}">
+        ◀ 이전달
+    </a>
+    <span th:if="${!yearMonth.isAfter(minMonth)}" style="color: gray;">◀ 이전달</span>
+
+    <!-- 다음달 버튼 -->
+    <a th:if="${yearMonth.isBefore(maxMonth)}"
+       th:href="@{/reservations(year=${yearMonth.plusMonths(1).year}, month=${yearMonth.plusMonths(1).monthValue})}">
+        다음달 ▶
+    </a>
+    <span th:if="${!yearMonth.isBefore(maxMonth)}" style="color: gray;">다음달 ▶</span>
 </div>
+
 
 <hr>
 
