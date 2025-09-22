@@ -29,7 +29,7 @@ public class CalendarController {
             return msg; // 항상 브로드캐스트 (UI 업데이트)
         } catch (Exception e) {
             // 실패했을 때는 에러 메시지 객체를 따로 만들어서 내려주거나 로그만 찍는 방식 사용
-            return new ReservationForm(msg.getDate(), "00:00", "00:00" ,"에러: " + e.getMessage(), false);
+            return new ReservationForm(msg.getDate(), "00:00", "00:00" ,"에러: " + e.getMessage(), false, "null");
         }
     }
 }

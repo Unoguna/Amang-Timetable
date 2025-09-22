@@ -15,4 +15,5 @@ public class ReservationForm {
     private String endTime;   // HH:mm
     private String reserver;
     private boolean persist;
+    private String sender;
 }

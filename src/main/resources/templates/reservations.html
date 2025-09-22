@@ -84,6 +84,7 @@
 
     let stompClient = null;
     let wsReady = false;
+    const socketId = Math.random().toString(36).substring(2, 9); // ✅ 내 브라우저 고유 ID
 
     document.addEventListener("DOMContentLoaded", () => {
         connectWebSocket();
@@ -92,22 +93,12 @@
             → saveReservation(input) 실행됨.
         */
         document.querySelectorAll(".slot-input").forEach(input => {
-            let isComposing = false;
 
-            input.addEventListener("compositionstart", () => {
-                isComposing = true;
-            });
-
-            input.addEventListener("compositionend", () => {
-                isComposing = false;
-                sendReservation(input, false); // 조합 끝났을 때만 보냄
-            });
             // 🔹 타이핑할 때마다 상대방 화면에도 바로 반영 (DB는 저장 안 함)
             input.addEventListener("input", () => {
-                if (!isComposing) {
-                    sendReservation(input, false); // 영문/숫자는 바로 전송
-                }
+                sendReservation(input, false);
             });
+
 
             input.addEventListener("keydown", e => {
                 if (e.key === "Enter") {
@@ -150,17 +141,19 @@
         const date = input.dataset.date;
         const hour = parseInt(input.dataset.hour, 10);
         const startTime = String(hour).padStart(2, "0") + ":00";
-        // ✅ 23시는 24:00 대신 23:59로 보냄
         const endTime = (hour === 23)
             ? "23:59"
             : String(hour + 1).padStart(2, "0") + ":00";
 
-        const message = { date, startTime, endTime, reserver, persist };
+        const message = { date, startTime, endTime, reserver, persist, sender: socketId  };
         stompClient.send("/app/updateCell", {}, JSON.stringify(message));
     }
 
     // ✅ 받은 업데이트를 data-date + data-start 로 정확히 찾아서 반영
     function applyUpdate(update) {
+        // ✅ 내가 보낸 메시지는 무시
+        if (update.sender === socketId) return;
+
         console.log("📩 받은 업데이트:", update);
         const selector = `.slot-input[data-date="${update.date}"][data-hour="${parseInt(update.startTime)}"]`;
         const input = document.querySelector(selector);
