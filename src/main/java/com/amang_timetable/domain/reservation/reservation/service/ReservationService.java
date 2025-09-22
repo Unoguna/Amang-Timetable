@@ -52,4 +52,10 @@ public class ReservationService {
         reservationRepository.deleteByDateAndStartTime(LocalDate.parse(date), LocalTime.parse(startTime));
     }
 
+    public void cleanupOldReservations() {
+        LocalDate cutoffDate = LocalDate.now().minusYears(1);
+        reservationRepository.deleteByDateBefore(cutoffDate);
+        System.out.println("✅ 1년 전 이전 데이터 삭제 완료: " + cutoffDate + " 이전");
+    }
+
 }

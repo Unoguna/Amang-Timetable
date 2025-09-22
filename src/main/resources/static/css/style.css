@@ -2,7 +2,7 @@
 .slot-row {
     display: grid;
     border-bottom: 1px solid #eee;
-    height: 20px;                     /* 높이 고정 */
+    height: 22px;                     /* 높이 고정 */
     overflow: hidden;
 }
 
@@ -10,7 +10,7 @@
 .slot-time,
 .slot-body {
     line-height: 20px;    /* 슬롯 높이와 동일 */
-    height: 20px;         /* 내부도 고정 */
+    height: 22px;         /* 내부도 고정 */
     margin: 0;
     padding: 0;
     text-align: center;
@@ -18,7 +18,7 @@
 
 /* 왼쪽 시간 영역 */
 .slot-time {
-    font-size: 12px;
+    font-size: 14px;
     color: black;
     padding-right: 4px;
     white-space: nowrap;  /* 줄바꿈 방지 */

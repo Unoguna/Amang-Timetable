@@ -12,4 +12,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findByDateBetween(LocalDate start, LocalDate end);
     Optional<Reservation> findByDateAndStartTime(LocalDate date, LocalTime startTime);
     void deleteByDateAndStartTime(LocalDate date, LocalTime startTime);
+    void deleteByDateBefore(LocalDate cutoffDate);
 }
